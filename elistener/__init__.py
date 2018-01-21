@@ -1,5 +1,6 @@
 import os
 import json
+import base64
 
 from flask import Flask
 
@@ -44,9 +45,10 @@ def connect_db():
     try:
         db = {
             "db_econnect": client["{}econnect".format(prefix)],
-            "db_users": client["{}users".format(prefix)],
+            "db_brands": client["{}brands".format(prefix)],
             "db_bots": client["{}bots".format(prefix)],
-            "db_clients": client["{}clients".format(prefix)]
+            "db_users": client["{}users".format(prefix)],
+            "db_raw_input": client["{}raw_input".format(prefix)]
         }
     except:
         raise
@@ -54,6 +56,6 @@ def connect_db():
     return client, db
 
 # DO NOT MOVE!
-from ebot.modules.main import main
+from elistener.modules.main import main
 
 app.register_blueprint(main)

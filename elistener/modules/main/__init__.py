@@ -49,15 +49,29 @@ def facebook():
         else:
             abort(403)
     elif request.method == 'POST':
-        msg = request.json
-        if "object" in msg and msg['object'] == 'page':
-            for entry in msg['entry']:
-                if "messaging" in entry:
-                    process_facebook_input(entry)
-                elif "changes" in entry:
-                    process_facebook_feed(entry)
-        elif "object" in msg and msg['object'] == 'instagram':
-            for entry in msg['entry']:
-                if "changes" in entry:
-                    process_instagram_comment(entry)
+        data = request.json
+        db = get_db()
+        msg_json = {
+            "status": 0,
+            "source": "facebook",
+            "data": data
+        }
+        inserted_id = db["db_raw_input"]["raw_input"].insert_one(msg_json).inserted_id
+        if not inserted_id:
+            abort(500)
+    return jsonify({})
+
+
+@main.route('/api/telegram', methods=['POST'])
+def telegram():
+    data = request.json
+    db = get_db()
+    msg_json = {
+        "status": 0,
+        "source": "telegram",
+        "data": data
+    }
+    inserted_id = db["db_raw_input"]["raw_input"].insert_one(msg_json).inserted_id
+    if not inserted_id:
+        abort(500)
     return jsonify({})
