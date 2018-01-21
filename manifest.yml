@@ -1,0 +1,4 @@
+applications:
+- name: EibrielListener
+  host: eibriellistener
+  memory: 128M
