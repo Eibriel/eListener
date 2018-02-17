@@ -52,7 +52,7 @@ def facebook():
         data = request.json
         db = get_db()
         msg_json = {
-            "status": 0,
+            "status": 0,  # 0 = Waiting
             "source": "facebook",
             "data": data
         }
@@ -69,6 +69,21 @@ def telegram():
     msg_json = {
         "status": 0,
         "source": "telegram",
+        "data": data
+    }
+    inserted_id = db["db_raw_input"]["raw_input"].insert_one(msg_json).inserted_id
+    if not inserted_id:
+        abort(500)
+    return jsonify({})
+
+
+@main.route('/api/mercadolibre', methods=['POST'])
+def mercadolibre():
+    data = request.json
+    db = get_db()
+    msg_json = {
+        "status": 0,
+        "source": "mercadolibre",
         "data": data
     }
     inserted_id = db["db_raw_input"]["raw_input"].insert_one(msg_json).inserted_id
